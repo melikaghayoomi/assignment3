@@ -34,7 +34,7 @@ Since our data represnts every time a student makes a comment there are multiple
 
 EDGE <- count(D2, comment.to, comment.from)
 
-names(EDGE) <- c("from", "to", "count")
+names(EDGE) <- c("to", "from", "count")
 
 ```
 
@@ -103,8 +103,36 @@ plot(g,layout=layout.fruchterman.reingold, vertex.color=VERTEX$gender, edge.widt
 In Part II your task is to [look up](http://igraph.org/r/) in the igraph documentation and modify the graph above so that:
 
 * Ensure that sizing allows for an unobstructed view of the network features (For example, the arrow size is smaller)
+```{r}
+
+centralization.betweenness(g, directed = TRUE, nobigint = TRUE, normalized = TRUE)
+plot(g,layout=layout.fruchterman.reingold, 
+     vertex.frame.color="gray",vertex.label.color="black", edge.arrow.size = 0.4, vertex.dist = 2, vertex.size = 15)
+
+
+
+```
+
 * The vertices are colored according to major
+
+```{r}
+EDGENEW <- EDGE %>% group_by(to) %>% mutate(received.sum = sum(count))
+
+g <- graph.data.frame(D3, directed = TRUE, vertices=VERTEX)
+plot(g, layout=layout.fruchterman.reingold, vertex.size = D3$received.sum*3, edge.arrow.size = 0.3, edge.color = "black", vertex.color = VERTEX$major, edge.width = 2)
+```
+
+```
+
 * The vertices are sized according to the number of comments they have recieved
+`EDGENEW <- EDGE %% group_by(to) %% mutate(received.sum = sum(count))
+
+g <- graph.data.frame(D3, directed = TRUE, vertices=VERTEX)
+plot(g, layout=layout.fruchterman.reingold, vertex.size = D3$received.sum*3, edge.arrow.size = 0.3, edge.color = "black", vertex.color = VERTEX$major, edge.width = 2)
+```
+```
+
+
 
 ## Part III
 
